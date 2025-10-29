@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 20s
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["prometheus:9090"]
+  - job_name: "power-monitoring"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["nodered:1880"]
+        labels:
+          group: "esp32"
