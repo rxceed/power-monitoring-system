@@ -66,6 +66,14 @@ services:
       - 8883:8883
       - 18083:18083
 
+  flask_server:
+    build: ./src
+    container_name: rtos-flask
+    ports:
+      - 5000:5000
+    networks:
+      - power-monitoring
+
 volumes:
   nodered_data:
   grafana_data:

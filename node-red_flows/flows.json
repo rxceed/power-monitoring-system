@@ -1,0 +1,511 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Main",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "cceb8b12124f32bd",
+        "type": "mqtt-broker",
+        "name": "EMQX",
+        "broker": "emqx",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "ce7fef344411b78e",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "mqtt-in-voltage",
+        "topic": "esp32/voltage",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "cceb8b12124f32bd",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 120,
+        "wires": [
+            [
+                "183f288a0e16d963"
+            ]
+        ]
+    },
+    {
+        "id": "c834b0cc8b700975",
+        "type": "http in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "url": "/metrics",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 660,
+        "wires": [
+            [
+                "e9468d2021f6c2e2"
+            ]
+        ]
+    },
+    {
+        "id": "28fb23d804f16511",
+        "type": "http response",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "text/plain"
+        },
+        "x": 560,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "183f288a0e16d963",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "voltage",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e9468d2021f6c2e2",
+        "type": "template",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "voltage{source=\"esp32\"} {{flow.voltage}}\ncurrent{source=\"esp32\"} {{flow.current}}\nenergy{source=\"esp32\"} {{flow.energy}}\npowerFactor{source=\"esp32\"} {{flow.powerFactor}}\nfrequency{source=\"esp32\"} {{flow.frequency}}\npower{source=\"esp32\"} {{flow.power}}\npredicted_devices{source=\"ml\"} {{flow.predicted}}\nprobability{source=\"ml\"} {{flow.probability}}",
+        "output": "str",
+        "x": 340,
+        "y": 660,
+        "wires": [
+            [
+                "28fb23d804f16511"
+            ]
+        ]
+    },
+    {
+        "id": "5418e004c3b83251",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "esp32/current",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cceb8b12124f32bd",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 200,
+        "wires": [
+            [
+                "6f8ff0a00479724f"
+            ]
+        ]
+    },
+    {
+        "id": "6f8ff0a00479724f",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "current",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d63fe1657ce1e767",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "esp32/powerFactor",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cceb8b12124f32bd",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "6ba5f3373d1c4058"
+            ]
+        ]
+    },
+    {
+        "id": "6ba5f3373d1c4058",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "powerFactor",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3eb355ec787cd679",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "esp32/energy",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cceb8b12124f32bd",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 280,
+        "wires": [
+            [
+                "e304231e38d33d00"
+            ]
+        ]
+    },
+    {
+        "id": "e304231e38d33d00",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "energy",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "da2c7eb40e62d8b2",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "esp32/frequency",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cceb8b12124f32bd",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 420,
+        "wires": [
+            [
+                "515e31daaf1b1945"
+            ]
+        ]
+    },
+    {
+        "id": "515e31daaf1b1945",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "frequency",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 390,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f7faab57a6657bcb",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "esp32/power",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "cceb8b12124f32bd",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 500,
+        "wires": [
+            [
+                "672db4a1b7133914"
+            ]
+        ]
+    },
+    {
+        "id": "672db4a1b7133914",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "power",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1cef15d8b3a89a3f",
+        "type": "http request",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "Content-Type",
+                "keyValue": "",
+                "valueType": "application/json",
+                "valueValue": ""
+            }
+        ],
+        "x": 570,
+        "y": 580,
+        "wires": [
+            [
+                "88a20b7cca7bf9a6"
+            ]
+        ]
+    },
+    {
+        "id": "1423b7772b5ff0aa",
+        "type": "complete",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "scope": [
+            "183f288a0e16d963",
+            "6f8ff0a00479724f",
+            "6ba5f3373d1c4058",
+            "e304231e38d33d00",
+            "515e31daaf1b1945",
+            "672db4a1b7133914"
+        ],
+        "uncaught": false,
+        "x": 130,
+        "y": 580,
+        "wires": [
+            [
+                "1493672d3148acdb"
+            ]
+        ]
+    },
+    {
+        "id": "1493672d3148acdb",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "set request body",
+        "func": "const payload = msg.payload;\nconst data = {\n    \"current\": flow.get('current'),\n    \"voltage\": flow.get('voltage'),\n    \"energy\": flow.get('energy'),\n    \"power_factor\": flow.get('powerFactor'),\n    \"frequency\": flow.get('frequency'),\n    \"power\": flow.get('power')\n}\nreturn json",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 580,
+        "wires": [
+            [
+                "1cef15d8b3a89a3f"
+            ]
+        ]
+    },
+    {
+        "id": "88a20b7cca7bf9a6",
+        "type": "json",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 750,
+        "y": 580,
+        "wires": [
+            [
+                "0d434b12cc27d335"
+            ]
+        ]
+    },
+    {
+        "id": "0d434b12cc27d335",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "prediction",
+                "pt": "flow",
+                "to": "payload.prediction",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "probability",
+                "pt": "flow",
+                "to": "payload.probability",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 940,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b31b71a2e2885d53",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "esp32/inference",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "cceb8b12124f32bd",
+        "x": 1200,
+        "y": 580,
+        "wires": []
+    }
+]
