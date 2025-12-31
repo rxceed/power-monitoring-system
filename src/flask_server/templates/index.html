@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .card {
+            background: white;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-align: left;
+            padding-left: 40px;
+        }
+
+        .card:nth-child(2) .header {
+            background-color: #c0392b; 
+        }
+
+        .body {
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .label {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .confidence {
+            font-size: 1.8rem;
+            color: #555;
+            background-color: #f1f3f5;
+            padding: 15px 40px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        /* NEW STYLES FOR IFRAME LAYOUT */
+        .iframe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1000px;
+            justify-items: center;
+        }
+
+        .iframe-grid iframe {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            width: 100%; /* Makes them responsive within the grid cell */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        {% for item in displays %}
+        <div class="card">
+            <div class="header">
+                {{ item.title }}
+            </div>
+            <div class="body">
+                <div class="label" id="label-{{ loop.index0 }}">
+                    {{ item.label }}
+                </div>
+                
+                <div class="confidence" id="conf-{{ loop.index0 }}">
+                    CONFIDENCE: {{ "%.2f"|format(item.confidence * 100) }}%
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="iframe-grid">
+            <iframe src="http://172.18.0.6:3000/d-solo/adzsfpg/rtos_powermonitoring?orgId=1&refresh=5s&theme=light&panelId=panel-1&__feature.dashboardSceneSolo=true" height="200" frameborder="0"></iframe>
+            <iframe src="http://172.18.0.6:3000/d-solo/adzsfpg/rtos_powermonitoring?orgId=1&refresh=5s&theme=light&panelId=panel-2&__feature.dashboardSceneSolo=true" height="200" frameborder="0"></iframe>
+            <iframe src="http://172.18.0.6:3000/d-solo/adzsfpg/rtos_powermonitoring?orgId=1&refresh=5s&theme=light&panelId=panel-5&__feature.dashboardSceneSolo=true" height="200" frameborder="0"></iframe>
+            <iframe src="http://172.18.0.6:3000/d-solo/adzsfpg/rtos_powermonitoring?orgId=1&refresh=5s&theme=light&panelId=panel-6&__feature.dashboardSceneSolo=true" height="200" frameborder="0"></iframe>
+            <iframe src="http://172.18.0.6:3000/d-solo/adzsfpg/rtos_powermonitoring?orgId=1&refresh=5s&theme=light&panelId=panel-3&__feature.dashboardSceneSolo=true" height="200" frameborder="0"></iframe>
+            <iframe src="http://172.18.0.6:3000/d-solo/adzsfpg/rtos_powermonitoring?orgId=1&&refresh=5s&theme=light&panelId=panel-4&__feature.dashboardSceneSolo=true" height="200" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function updateDashboard() {
+            fetch('/live-data')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach((item, index) => {
+                        const labelEl = document.getElementById('label-' + index);
+                        const confEl = document.getElementById('conf-' + index);
+
+                        if (labelEl) labelEl.textContent = item.label;
+                        if (confEl) {
+                            const percent = (item.confidence * 100).toFixed(2);
+                            confEl.textContent = 'CONFIDENCE: ' + percent + '%';
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+        setInterval(updateDashboard, 1000);
+    </script>
+
+</body>
+</html>
